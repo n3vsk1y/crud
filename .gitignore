@@ -6,8 +6,8 @@ venv/
 *.pyo
 *.log
 
-.env/
-**/.env
+# .env/
+# **/.env
 
 **/__pycache__/
 
