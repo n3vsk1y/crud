@@ -10,6 +10,7 @@
 - Фронтенд: http://localhost:3000
 
 ### 2. Запуск без Docker
+
 Для запуска без Docker необходимо в терминале выполнить следующие команды
 
 *Для Windows:*
@@ -26,11 +27,11 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-Далее необходимо создать бд в PostgreSQL согласно данным в .env или запустить через Docker
+Далее необходимо создать бд в PostgreSQL согласно данным в .env или запустить через Docker: `psql -U DB_USER -d postgres -c "CREATE DATABASE DB_NAME;"` 
 
 Теперь необходимо применить миграции с помощью команды `alembic upgrade head`
 
-Наконец можно запускать бэк и фронт в разных терминалах с помощью следующих команд:
+Наконец можно запустить сервер и клиент в разных терминалах с помощью следующих команд:
 
 *Backend:*
 ```
@@ -41,5 +42,6 @@ uvicorn main:app --reload
 *Frontend:*
 ```
 cd frontend
+npm install
 npm run dev
 ```
