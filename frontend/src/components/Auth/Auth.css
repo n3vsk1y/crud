@@ -1,0 +1,35 @@
+.content-div {
+    position: relative;
+    top: 30vh;
+    left: 50vw;
+    transform: translate(-50%, -50%);
+}
+
+.input-wrapper {
+	position: relative;
+	margin: 10px auto;
+	width: fit-content;
+}
+
+form {
+	position: relative;
+	text-align: center;
+}
+
+.button-container {
+    position: relative;
+    left: 50vw;
+    width: 15rem;
+	display: flex;
+    flex-direction: column;
+    transform: translate(-50%);
+}
+
+button {
+    transform: none;
+    transition: transform 0.5s ease;
+}
+
+.secondary {
+    transform: scale(0.75);
+}

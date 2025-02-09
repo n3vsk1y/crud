@@ -45,3 +45,6 @@ cd frontend
 npm install
 npm run dev
 ```
+
+- Бэкенд: http://localhost:8000
+- Фронтенд: http://localhost:5173

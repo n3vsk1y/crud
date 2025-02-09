@@ -8,7 +8,7 @@ services:
         depends_on:
             - db
         environment:
-            DATABASE_URL: postgresql://postgres:password@db:5432/mydatabase
+            DATABASE_URL: postgresql+asyncpg://postgres:password@db:5432/crud-app
         volumes:
             - ./backend:/app
         restart: always
@@ -17,8 +17,12 @@ services:
         build: ./frontend
         ports:
             - '3000:80'
+        volumes:
+            - ./frontend:/app
         depends_on:
             - backend
+        environment:
+            - VITE_HOST=0.0.0.0
         restart: always
 
     db:
