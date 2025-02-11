@@ -34,7 +34,7 @@ def read_root():
     return {"App": "Started"}
 
 
-@app.get("/check")
+@app.get("/check_bd")
 async def check_bd(db: Session = Depends(get_db)):
     try:
         async with db.begin():
