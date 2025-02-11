@@ -242,8 +242,11 @@ async def get_user_transactions(db: Session = Depends(get_db), current_user=Depe
 
 
 @router.get("/get_all_accounts")
-async def get_all_accounts(db: Session = Depends(get_db)):
+async def get_all_accounts(db: Session = Depends(get_db), current_user=Depends(get_user)):
     try:
+        if current_user.role != "admin":
+            raise HTTPException(status_code=403, detail="Permission denied")
+        
         query = select(Account)
         result = await db.execute(query)
         accounts = result.fetchall()
