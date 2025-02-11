@@ -1,29 +1,14 @@
-# FROM node:18 AS build-stage
-
-# WORKDIR /app
-
-# COPY package.json package-lock.json ./
-# RUN npm install
-# COPY . .
-# RUN npm run build
-
-# FROM nginx:alpine
-# COPY --from=build-stage /app/dist /usr/share/nginx/html
-# EXPOSE 80
-# CMD ["nginx", "-g", "daemon off;"]
-
 FROM node:18 AS build-stage
 
 WORKDIR /app
 
 COPY package.json package-lock.json ./
 RUN npm install
-
 COPY . .
+RUN npm run build
 
-RUN npm install
-
-EXPOSE 5173
-
-CMD ["npm", "run", "dev"]
+FROM nginx:alpine
+COPY --from=build-stage /app/dist /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
 

@@ -12,32 +12,17 @@ services:
         restart: always
         command: bash -c "alembic upgrade head && uvicorn main:app --host 0.0.0.0 --port 8000 --reload"
 
-    # frontend:
-    #     build: ./frontend
-    #     ports:
-    #         - '3000:80'
-    #     volumes:
-    #         - ./frontend:/app
-    #     depends_on:
-    #         - backend
-    #     environment:
-    #         - VITE_HOST=0.0.0.0
-    #     restart: always
-
     frontend:
         build: ./frontend
         ports:
-            - '5173:5173'
+            - '3000:80'
         volumes:
             - ./frontend:/app
-            - /app/node_modules
         depends_on:
             - backend
         environment:
             - VITE_HOST=0.0.0.0
-            - CHOKIDAR_USEPOLLING=true
         restart: always
-        command: npm run dev
 
     db:
         image: postgres:15
