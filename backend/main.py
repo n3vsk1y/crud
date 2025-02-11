@@ -30,14 +30,13 @@ app.add_middleware(
 
 @app.get("/")
 def read_root():
-    return {"App": "Started1123211"}
+    return {"App": "Started"}
 
 
 @app.get("/check")
 async def check_bd(db: Session = Depends(get_db)):
     try:
         result = await db.execute(select(1))
-        res = result.scalars().first()
-        print(res)
+        return {"status": "success", "message": "Database success connection"}
     except Exception as e:
         return {"status": "error", "message": f"Database connection failed: {str(e)}"}
