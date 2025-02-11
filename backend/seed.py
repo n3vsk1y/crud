@@ -1,65 +1,82 @@
 import asyncio
+from sqlalchemy import select
 from app.core.database import SessionLocal
 from app.models.models import User, Account, Transaction
 from app.routes.hash import hash_password
 
+
 async def seed_data():
     async with SessionLocal() as db:
-        user = User(
-            email="user@example.com",
-            password=hash_password("user"),
-            role="user",
-        )
+        user_query = select(User).where(User.email == "user@example.com")
+        user_result = await db.execute(user_query)
+        user_exists = user_result.scalars().first()
 
-        admin = User(
-            email="admin@example.com",
-            password=hash_password("admin"),
-            role="admin",
-        )
+        admin_query = select(User).where(User.email == "admin@example.com")
+        admin_result = await db.execute(admin_query)
+        admin_exists = admin_result.scalars().first()
 
-        db.add(user)
-        db.add(admin)
-        await db.commit()
-        await db.refresh(user)
-        await db.refresh(admin)
+        user = None
+        if not user_exists:
+            user = User(
+                email="user@example.com",
+                password=hash_password("user"),
+                role="user",
+            )
+            db.add(user)
+            await db.refresh(user)
+            await db.commit()
 
-        user_account1 = Account(user_id=user.id, balance=500)
-        user_account2 = Account(user_id=user.id, balance=1000)
-        admin_account = Account(user_id=admin.id, balance=5000)
+        admin = None
+        if not admin_exists:
+            admin = User(
+                email="admin@example.com",
+                password=hash_password("admin"),
+                role="admin",
+            )
+            db.add(admin)
+            await db.refresh(admin)
+            await db.commit()
 
-        db.add(user_account1)
-        db.add(user_account2)
-        db.add(admin_account)
-        await db.commit()
+        if user:
+            user_account1 = Account(user_id=user.id, balance=500)
+            user_account2 = Account(user_id=user.id, balance=1000)
 
-        user_transaction1 = Transaction(
-            user_id=user.id,
-            account_id=user_account1.id,
-            amount=500,
-        )
-        user_transaction2 = Transaction(
-            user_id=user.id,
-            account_id=user_account2.id,
-            amount=700,
-        )
-        user_transaction3 = Transaction(
-            user_id=user.id,
-            account_id=user_account2.id,
-            amount=300,
-        )
-        admin_transaction = Transaction(
-            user_id=admin.id,
-            account_id=admin_account.id,
-            amount=5000,
-        )
+            user_transaction1 = Transaction(
+                user_id=user.id,
+                account_id=user_account1.id,
+                amount=500,
+            )
+            user_transaction2 = Transaction(
+                user_id=user.id,
+                account_id=user_account2.id,
+                amount=700,
+            )
+            user_transaction3 = Transaction(
+                user_id=user.id,
+                account_id=user_account2.id,
+                amount=300,
+            )
 
-        db.add(user_transaction1)
-        db.add(user_transaction2)
-        db.add(user_transaction3)
-        db.add(admin_transaction)
-        await db.commit()
+            db.add(user_account1)
+            db.add(user_account2)
+            db.add(user_transaction1)
+            db.add(user_transaction2)
+            db.add(user_transaction3)
+            await db.commit()
 
-        print("✅ Данные успешно добавлены в БД!")
+        if admin:
+            admin_account = Account(user_id=admin.id, balance=5000)
+
+            admin_transaction = Transaction(
+                user_id=admin.id,
+                account_id=admin_account.id,
+                amount=5000,
+            )
+
+            db.add(admin_account)
+            db.add(admin_transaction)
+            await db.commit()
+
 
 if __name__ == "__main__":
     asyncio.run(seed_data())

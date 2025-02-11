@@ -122,29 +122,6 @@ async def refresh_token(request: Request):
         raise HTTPException(status_code=401, detail=str(e))
 
 
-{
-    "transaction_id": "5eae174f-7cd0-472c-bd36-35660f00132b",
-    "user_id": "6dcf34de-470f-4399-a61d-deda8e96e0cd",
-    "account_id": "6dcf34de-470f-4399-a61d-deda8e96e0cd",
-    "amount": 100,
-    "signature": "0bb95902a7fc463da70fd91c098ed9efd993c11b6bb7a0cf8b2947d590ca1afd"
-}
-{
-    "transaction_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-    "user_id": "6dcf34de-470f-4399-a61d-deda8e96e0cd",
-    "account_id": "6dcf34de-470f-4399-a61d-deda8e96e0cd",
-    "amount": 150,
-    "signature": "707b35be0ea869817b11c22bcdb6b5681d36d922890c5587e13787636dd7138f"
-}
-{
-    "transaction_id": "a2d968ea-92f0-4c0d-9185-6b661044614d",
-    "user_id": "6dcf34de-470f-4399-a61d-deda8e96e0cd",
-    "account_id": "30def338-25c5-4c0b-8b4e-aee74936e3ae",
-    "amount": 150,
-    "signature": "d1199ab5952a122df480c705682f9868a1c70c5e4c67ee8bea0a66dd8b1ef4b7"
-}
-
-
 @router.post("/webhook")
 async def process_transaction(data: TransactionSchema, db: AsyncSession = Depends(get_db)):
     expected_signature = await generate_signature(data.transaction_id, data.user_id, data.account_id, data.amount)
