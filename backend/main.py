@@ -8,6 +8,7 @@ from fastapi import Depends
 from app.core.database import get_db
 from sqlalchemy.orm import Session
 from sqlalchemy.future import select
+from sqlalchemy import inspect, text
 
 
 # @asynccontextmanager
@@ -21,7 +22,7 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=["http://localhost:5173", "http://localhost:3000"],
     allow_credentials=True,
     allow_methods=["GET", "POST", "OPTIONS", "DELETE", "PATCH", "PUT"],
     allow_headers=["Content-Type", "Set-Cookie", "Access-Control-Allow-Headers", "Access-Control-Allow-Origin",
@@ -36,7 +37,9 @@ def read_root():
 @app.get("/check")
 async def check_bd(db: Session = Depends(get_db)):
     try:
-        result = await db.execute(select(1))
-        return {"status": "success", "message": "Database success connection"}
+        async with db.begin():
+            result = await db.execute(text("SELECT table_name FROM information_schema.tables WHERE table_schema = 'public'"))
+            tables = [row[0] for row in result.fetchall()]
+            return {"status": "success", "message": f"Tables: {tables}"}
     except Exception as e:
         return {"status": "error", "message": f"Database connection failed: {str(e)}"}
