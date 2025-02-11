@@ -10,14 +10,14 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 ALGORITHM = 'HS256'
 
 
-def create_access_token(data: dict):
+async def create_access_token(data: dict):
     payload = {
         'exp': datetime.now(timezone.utc) + timedelta(minutes=100),
         'data': data,
     }
     return jwt.encode(payload, SECRET_KEY, algorithm=ALGORITHM)
 
-def create_refresh_token(data: dict):
+async def create_refresh_token(data: dict):
     payload = {
         'exp': datetime.now(timezone.utc) + timedelta(days=30),
         'data': data,

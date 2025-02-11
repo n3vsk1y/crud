@@ -26,15 +26,15 @@ class Account(Base):
     balance: Mapped[float] = mapped_column(Float, default=0.0)
 
     user = relationship('User', back_populates='accounts')
-    payments = relationship('Payment', back_populates='account')
+    transactions = relationship('Transaction', back_populates='account')
 
 
-class Payment(Base):
-    __tablename__ = 'payments'
+class Transaction(Base):
+    __tablename__ = 'transactions'
 
     id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     account_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey('accounts.id'), nullable=False)
     amount: Mapped[float] = mapped_column(Float, nullable=False)
     time: Mapped[DateTime] = mapped_column(DateTime, default=func.now())
 
-    account = relationship('Account', back_populates='payments')
+    account = relationship('Account', back_populates='transactions')
