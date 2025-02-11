@@ -35,9 +35,9 @@ services:
             - backend
         environment:
             - VITE_HOST=0.0.0.0
-            - CHOKIDAR_USEPOLLING=true  # Включаем polling для отслеживания изменений на Windows
+            - CHOKIDAR_USEPOLLING=true
         restart: always
-        command: npm run dev # Запуск Vite в режиме разработки с hot-reloading
+        command: npm run dev
 
     db:
         image: postgres:15

@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 
+from app.routes import api
 from app.core.database import Base, engine
 
 from fastapi import Depends
@@ -19,6 +20,8 @@ from sqlalchemy import inspect, text
 
 
 app = FastAPI()
+
+app.include_router(api.router)
 
 app.add_middleware(
     CORSMiddleware,
